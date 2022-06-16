@@ -5,85 +5,41 @@
 
 using namespace std;
 
-struct object
-{
+map<int, int> Numbers;
 
-};
+void AddData(int _Key, int _Value);
 
 int main(void)
 {
-	/*
-	map<int, int> Numbers;
+	Numbers[0] = 0;
+	Numbers[1] = 10;
+	Numbers[2] = 20;
+	Numbers.insert(make_pair(3, 30));
 
-	// Key, Value
+	Numbers[1] = 100;
 
-	Numbers[0] = 1;
-	Numbers[1] = 2;
-	Numbers[2] = 3;
-	Numbers[3] = 4;
-	Numbers[4] = 5;
-	*/
+	Numbers.insert(make_pair(4, 40));
 
-	/*
-	map<string, int> Numbers;
+	map<int, int>::iterator iter = Numbers.find(2);
 
-	// Key, Value
+	//Numbers.insert(make_pair(2, 200)); 기존 데이터를 지켜주기에 make_pair를 써도 바뀌지 않음
+	
+	AddData(2, 200);
 
-	Numbers["A"] = 1;
-	Numbers["B"] = 2;
-	Numbers["C"] = 3;
-	Numbers["D"] = 4;
-	Numbers["E"] = 5;
-
-	for (map<string, int>::iterator iter = Numbers.begin(); iter != Numbers.end(); ++iter)
-	{
-		cout << iter->first << endl;
-		cout << iter->second << endl << endl;
-	}
-
-	for (auto iter = Numbers.begin(); iter != Numbers.end(); ++iter)
-	{
-		cout << iter->first << endl;
-		cout << iter->second << endl << endl;
-	}
-	*/
-
-	// 배열은 정수이면서 상수여야 한다
-	/*enum Key { AAA, BBB, CCC, DDD, EEE };
-
-	const int Max = 10;
-
-	Key _State = AAA;
-	int Array[EEE];
-
-	cout << Array[_State] << endl;
-	*/
-
-	// 심볼릭 상수를 활용한 2차원 배열
-	enum Key 
-	{ 
-		Player,
-		Enemy,
-		Bullet,
-		Max,
-	};
-
-	const int MaxObject = 128;
-
-	int Array[Max][MaxObject];
-
-	for (int i = 0; i < Max; ++i)
-	{
-		for (int j = 0; j < MaxObject; ++j)
-		{
-			Array[i][j] = j;
-		}
-	}
-
-	for (int i = 0; i < MaxObject; ++i)
-		cout << Array[Enemy][i] << endl;
+	for (map<int, int>::iterator iter = Numbers.begin(); iter != Numbers.end(); ++iter)
+		cout << iter->second << endl;
 	
 	return 0;
+}
+
+void AddData(int _Key, int _Value)
+{
+	map<int, int>::iterator iter = Numbers.find(_Key);
+
+	if (iter == Numbers.end())
+		Numbers.insert(make_pair(_Key, _Value));
+	else
+		iter->second = _Value;
 }
 
 // 한 개의 키값과 한 개의 정보
