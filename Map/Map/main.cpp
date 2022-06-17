@@ -1,45 +1,86 @@
-// ContainerMap v0.1
+// ContainerMap v0.2
 #include <iostream>
 #include <string>
 #include <map>
+#include <list>
 
 using namespace std;
 
-map<int, int> Numbers;
+struct Vector3
+{
+	float x, y, z;
 
-void AddData(int _Key, int _Value);
+	Vector3() : x(0.0f), y(0.0f), z(0.0f) {};
+	Vector3(const float _x, const float _y) : x(_x), y(_y), z(0.0f) {};
+	Vector3(const float _x, const float _y, const float _z) : x(_x), y(_y), z(_z) {};
+};
+
+struct Transform
+{
+	Vector3 Position;
+	Vector3 Rotation;
+	Vector3 Scale;
+};
+
+struct Object
+{
+	Transform Info;
+
+	Object() {};
+	Object(const Transform& _Info) : Info(_Info) {};
+};
+
+struct Player : public Object
+{
+	Player() {};
+	Player(const Transform& _Info) : Object(_Info) {};
+};
+
+map<string, list<Object*>> Objects;
+
+void Initialize();
+void AddObject(string _Key, Object* _Object);
 
 int main(void)
 {
-	Numbers[0] = 0;
-	Numbers[1] = 10;
-	Numbers[2] = 20;
-	Numbers.insert(make_pair(3, 30));
+	//Initialize();
+	Transform Info;
 
-	Numbers[1] = 100;
+	Info.Position.x = 10;
+	Info.Position.y = 20;
+	Info.Position.z = 30;
 
-	Numbers.insert(make_pair(4, 40));
+	AddObject("Player", new Player(Info));
 
-	map<int, int>::iterator iter = Numbers.find(2);
+	for (map<string, list<Object*>>::iterator iter = Objects.begin(); iter != Objects.end(); ++iter)
+		cout << &(iter->second) << endl;
 
-	//Numbers.insert(make_pair(2, 200)); 기존 데이터를 지켜주기에 make_pair를 써도 바뀌지 않음
-	
-	AddData(2, 200);
-
-	for (map<int, int>::iterator iter = Numbers.begin(); iter != Numbers.end(); ++iter)
-		cout << iter->second << endl;
-	
 	return 0;
 }
 
-void AddData(int _Key, int _Value)
+void Initialize()
 {
-	map<int, int>::iterator iter = Numbers.find(_Key);
+	Transform Info;
 
-	if (iter == Numbers.end())
-		Numbers.insert(make_pair(_Key, _Value));
+	Info.Position.x = 10;
+	Info.Position.y = 20;
+	Info.Position.z = 30;
+
+	//Objects["Player"] = new Player(Info);
+}
+
+void AddObject(string _Key, Object* _Object)
+{
+	map<string, list<Object*>>::iterator iter = Objects.find(_Key);
+
+	if (iter == Objects.end())
+	{
+		list<Object*> Temp;
+		Temp.push_back(_Object);
+		Objects.insert(make_pair(_Key, Temp));
+	}
 	else
-		iter->second = _Value;
+		iter->second.push_back(_Object);
 }
 
 // 한 개의 키값과 한 개의 정보
